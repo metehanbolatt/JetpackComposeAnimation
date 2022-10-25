@@ -4,9 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.animateIntAsState
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.*
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.background
@@ -43,15 +42,27 @@ class MainActivity : ComponentActivity() {
                     ) {
                         Text(text = "Toggle")
                     }
-                    val borderRadius by animateIntAsState(
-                        targetValue = if (isRound) 100 else 0,
-                        animationSpec = tween(1000)
+                    val transition = updateTransition(targetState = isRound, label = null)
+
+                    val borderRadius by transition.animateInt(
+                        transitionSpec = { tween(2000) },
+                        label = "Border Radius",
+                        targetValueByState = {
+                            if (it) 100 else 0
+                        }
+                    )
+                    val color by transition.animateColor(
+                        transitionSpec = { tween(1000) },
+                        label = "color",
+                        targetValueByState = {
+                            if (it) Color.Green else Color.Red
+                        }
                     )
                     Box(
                         modifier = Modifier
                             .size(300.dp)
                             .clip(RoundedCornerShape(borderRadius))
-                            .background(Color.Red)
+                            .background(color)
                     )
                     /*
                     AnimatedVisibility(
