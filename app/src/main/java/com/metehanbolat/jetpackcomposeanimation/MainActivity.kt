@@ -42,6 +42,22 @@ class MainActivity : ComponentActivity() {
                     ) {
                         Text(text = "Toggle")
                     }
+                    val transition = rememberInfiniteTransition()
+                    val color by transition.animateColor(
+                        initialValue = Color.Red,
+                        targetValue = Color.Green,
+                        animationSpec = infiniteRepeatable(
+                            animation = tween(2000),
+                            repeatMode = RepeatMode.Reverse
+                        )
+                    )
+                    Box(
+                        modifier = Modifier
+                            .size(300.dp)
+                            .background(color)
+                    )
+
+                    /*
                     val transition = updateTransition(targetState = isRound, label = null)
 
                     val borderRadius by transition.animateInt(
@@ -58,13 +74,7 @@ class MainActivity : ComponentActivity() {
                             if (it) Color.Green else Color.Red
                         }
                     )
-                    Box(
-                        modifier = Modifier
-                            .size(300.dp)
-                            .clip(RoundedCornerShape(borderRadius))
-                            .background(color)
-                    )
-                    /*
+
                     AnimatedVisibility(
                         visible = isVisible,
                         enter = slideInHorizontally() + fadeIn(),
