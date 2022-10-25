@@ -3,27 +3,20 @@ package com.metehanbolat.jetpackcomposeanimation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.animateColor
-import androidx.compose.animation.core.*
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import com.metehanbolat.jetpackcomposeanimation.ui.theme.JetpackComposeAnimationTheme
 
+@ExperimentalAnimationApi
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +35,34 @@ class MainActivity : ComponentActivity() {
                     ) {
                         Text(text = "Toggle")
                     }
+
+                    AnimatedContent(
+                        targetState = isVisible,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        content = {
+                            if (it) {
+                                Box(modifier = Modifier.background(Color.Green))
+                            } else {
+                                Box(modifier = Modifier.background(Color.Red))
+                            }
+                        },
+                        transitionSpec = { slideInHorizontally(
+                            initialOffsetX = { if (isVisible) it else -it }
+                        ) with slideOutHorizontally(
+                            targetOffsetX = { if (isVisible) -it else it }
+                        ) }
+                    )
+
+
+
+
+
+
+
+
+                    /*
                     val transition = rememberInfiniteTransition()
                     val color by transition.animateColor(
                         initialValue = Color.Red,
@@ -57,7 +78,6 @@ class MainActivity : ComponentActivity() {
                             .background(color)
                     )
 
-                    /*
                     val transition = updateTransition(targetState = isRound, label = null)
 
                     val borderRadius by transition.animateInt(
